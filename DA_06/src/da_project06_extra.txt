@@ -1,0 +1,14 @@
+Средний чек купивших видеокарту: 363.38
+Средний чек не купивших видеокарту: 108,4
+
+with res_cte AS (
+  SELECT SUM(price)/COUNT(user_id) as avg_check, user_id, MAX(CASE
+                                                              when category_code = "computers.components.videocards" THEN "1"
+                                                              ELSE "0"
+                                                              END) AS buy
+  FROM da_project05_purch 
+  GROUP BY user_id )
+
+SELECT buy, ROUND(SUM(avg_check)/COUNT(user_id), 2)
+FROM res_cte
+GROUP BY buy
